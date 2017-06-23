@@ -1,0 +1,6 @@
+1. Initialize package.json
+      $ npm init
+
+2. Install packages
+      $ npm install express ejs --save
+
