@@ -4,3 +4,24 @@
 2. Install packages
       $ npm install express ejs --save
 
+3. REST - Mapping between HTTP routes and CRUD
+      Name    Path             Verb    Purpose
+      ====================================================================
+      Index   /blogs           GET     List all blogs
+      New     /blogs/New       GET     Show a new blog form
+      Create  /blogs           POST    Create a new blog, then redirect
+      Show    /blogs/:id       GET     Show one blog post
+      Edit    /blogs/:id/edit  GET     Show edit form for one blog post
+      Update  /blogs/:id       PUT     Update one blog post, then redirect
+      Destroy /blogs/:id       DELETE  Delete one blog post, then redirect
+
+      Mongoose Methods
+      ================
+      Index   => Blog.find()
+      New     => N/A
+      Create  => Blog.create()
+      Show    => Blog.findById()
+      Edit    => Blog.findById()
+      Update  => Blog.findByIdAndUpdate()
+      Destroy => Blog.findByIdAndRemove()
+      
