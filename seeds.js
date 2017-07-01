@@ -1,5 +1,7 @@
 var mongoose = require('mongoose');
 var Campground = require('./models/campground');
+var Comment = require('./models/comment');
+
 var data = [
   {
     name: "Cloud's Rest",
@@ -29,7 +31,7 @@ function seedDB() {
     if(error) {
       console.log(error);
     } else {
-      console.log("Clearing Campground DB...");  
+      console.log("Cleared Campground DB...");  
       // add sample campgrounds
       data.forEach(function(site) {
         Campground.create(site, function(error, newCampground) {
@@ -37,20 +39,20 @@ function seedDB() {
             console.log(error);
           } else {
             console.log("New Campground Created.");
-            // Comment.create(
-            //   {
-            //     text: "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", 
-            //     author: "Homer Simpson"
-            //   }, function(error, comment) {
-            //         if(error) {
-            //           console.log(error);
-            //         } else {
-            //           console.log("New Comment");
-            //           newCampground.comments.push(comment);
-            //           newCampground.save();
-            //        }
-            //     }
-            // );
+            Comment.create(
+              {
+                text: "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", 
+                author: "Homer Simpson"
+              }, function(error, comment) {
+                    if(error) {
+                      console.log(error);
+                    } else {
+                      console.log("New Comment");
+                      newCampground.comments.push(comment);
+                      newCampground.save();
+                   }
+                }
+            );
           }
         });
       });  

@@ -3,7 +3,7 @@ var express     = require("express"),
     bodyParser  = require("body-parser"),
     mongoose    = require("mongoose"),
     Campground  = require('./models/campground'),
-    //Comment     = require('./models/comment'),
+    Comment     = require('./models/comment'),
     seedDB      = require('./seeds');
 
 // Remove all Campground DB entries
@@ -13,23 +13,6 @@ mongoose.connect("mongodb://localhost/yelp_camp");
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
-
-// Campground.create(
-//   {
-//     name: "Salmon Creek", 
-//     image: "https://farm8.staticflickr.com/7042/7121867321_65b5f46ef1.jpg",
-//     description: "Description of Salmon Creek campground"
-//   }, 
-//   function(err, campground) {
-//     if(err) {
-//       console.log(err);
-//     } else {
-//       console.log("New Campground Created: ");
-//       console.log(campground);
-//     }
-
-//   }
-// );
 
 app.get("/", function(req, res) {
   res.render("landing");
@@ -73,10 +56,11 @@ app.get("/campgrounds/new", function(req, res) {
 // SHOW - Show detail about a single campground
 app.get("/campgrounds/:id", function(req, res) {
   // find campground with 'id'
-  Campground.findById(req.params.id, function(error, result) {
+  Campground.findById(req.params.id).populate("comments").exec(function(error, result) {
     if(error) {
       console.log(error);
     } else {
+      console.log(result);
       res.render("show", {campground: result});
     }
   });
