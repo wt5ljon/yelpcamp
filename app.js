@@ -25,7 +25,7 @@ app.get("/campgrounds", function(req, res) {
     if(err) {
       console.log(err);
     } else {
-      res.render("index", {sites: allCampgrounds});
+      res.render("campgrounds/index", {sites: allCampgrounds});
     }
   });
 });
@@ -50,7 +50,7 @@ app.post("/campgrounds", function(req, res) {
 
 // NEW - Show the form to add new campground
 app.get("/campgrounds/new", function(req, res) {
-  res.render("new");
+  res.render("campgrounds/new");
 });
 
 // SHOW - Show detail about a single campground
@@ -61,9 +61,44 @@ app.get("/campgrounds/:id", function(req, res) {
       console.log(error);
     } else {
       console.log(result);
-      res.render("show", {campground: result});
+      res.render("campgrounds/show", {campground: result});
     }
   });
+});
+
+// Add new comments route
+app.get("/campgrounds/:id/comments/new", function(req, res) {
+  Campground.findById(req.params.id, function(error, site) {
+    if(error) {
+      console.log(error);
+    } else {
+        res.render("comments/new", {campground: site});
+    }
+  })
+});
+
+app.post("/campgrounds/:id/comments", function(req, res) {
+  // look up campground using id
+  Campground.findById(req.params.id, function(error, site) {
+    if(error) {
+      console.log(error);
+      res.redirect("/campgrounds");
+    } else {
+      Comment.create(req.body.comment, function(error, comment) {
+        if(error) {
+          console.log(error);
+        } else {
+          site.comments.push(comment);
+          site.save();
+          res.redirect("/campgrounds/" + site._id);
+        }
+      });
+    }
+  });
+
+  // create new comment
+  // connect new comment to campground
+  // redirect to campground show page
 });
 
 app.listen(3000, function() {
