@@ -15,7 +15,7 @@ var campgroundRoutes = require('./routes/campgrounds'),
     indexRoutes      = require('./routes/index');
 
 // Remove all Campground DB entries
-seedDB();
+// seedDB();
 
 mongoose.connect("mongodb://localhost/yelp_camp");
 
