@@ -51,10 +51,33 @@ router.get("/:id", function(req, res) {
     if(error) {
       console.log(error);
     } else {
-      console.log(result);
       res.render("campgrounds/show", {campground: result});
     }
   });
+});
+
+// EDIT - campground route
+router.get("/:id/edit", function (req, res) {
+  Campground.findById(req.params.id, function(error, foundCampground) {
+    if(error) {
+      res.redirect("/campgrounds");
+    } else {
+      res.render("campgrounds/edit", {campground: foundCampground});
+    }
+  });
+});
+
+// UPDATE - campground route
+router.put("/:id", function(req, res) {
+  // find and update the correct campground
+  Campground.findByIdAndUpdate(req.params.id, req.body.campground, function(error, updatedCampground) {
+    if(error) {
+      res.redirect("/campgrounds");
+    } else {
+      res.redirect("/campgrounds/" + req.params.id);
+    }
+  });
+  // redirect to show page
 });
 
 // middleware
