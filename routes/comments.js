@@ -3,7 +3,7 @@ var router = express.Router({mergeParams: true});
 var Campground = require('../models/campground');
 var Comment = require('../models/comment');
 
-// new comments route
+// NEW - comment form route
 router.get("/new", isLoggedIn, function(req, res) {
   Campground.findById(req.params.id, function(error, site) {
     if(error) {
@@ -14,7 +14,7 @@ router.get("/new", isLoggedIn, function(req, res) {
   })
 });
 
-// create comments route
+// CREATE - comment route
 router.post("/", isLoggedIn, function(req, res) {
   // look up campground using id
   Campground.findById(req.params.id, function(error, site) {
@@ -31,12 +31,54 @@ router.post("/", isLoggedIn, function(req, res) {
           comment.author.username = req.user.username;
           // save comment
           comment.save();
-          console.log(comment);
           site.comments.push(comment);
           site.save();
           res.redirect("/campgrounds/" + site._id);
         }
       });
+    }
+  });
+});
+
+// EDIT - comment form route
+router.get("/:comment_id/edit", function(req, res) {
+  // look up campground using id
+  Campground.findById(req.params.id, function(error, site) {
+    if(error) {
+      console.log(error);
+      res.redirect("back");
+    } else {
+      Comment.findById(req.params.comment_id, function(error, comment) {
+        if(error) {
+          console.log(error);
+          res.redirect("/campgrounds");
+        } else {
+          res.render("comments/edit", {campground: site, comment: comment});         
+        }
+      });
+    }
+  });
+});
+
+// PUT - comment update route
+router.put("/:comment_id", function(req, res) {
+  Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(error, updatedComment) {
+    if(error) {
+      console.log(error);
+      res.redirect("back");
+    } else {
+      res.redirect("/campgrounds/" + req.params.id);
+    }
+  });
+});
+
+// DELETE - comment delete route
+router.delete("/:comment_id", function(req, res){
+  Comment.findByIdAndRemove(req.params.comment_id, function(error) {
+    if(error) {
+      res.redirect("back");
+    } else {
+      res.redirect("/campgrounds/" + req.params.id);
     }
   });
 });
