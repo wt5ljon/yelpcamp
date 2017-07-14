@@ -16,6 +16,8 @@ var campgroundRoutes = require('./routes/campgrounds'),
     commentRoutes    = require('./routes/comments'),
     indexRoutes      = require('./routes/index');
 
+var port = process.env.PORT || 3000;
+
 // Remove all Campground DB entries
 // seedDB();
 
@@ -51,6 +53,6 @@ app.use('/', indexRoutes);
 app.use('/campgrounds', campgroundRoutes);
 app.use('/campgrounds/:id/comments', commentRoutes);
 
-app.listen(3000, function() {
+app.listen(port, function() {
   console.log("Listening on port 3000");
 });
