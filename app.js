@@ -21,7 +21,8 @@ var port = process.env.PORT || 3000;
 // Remove all Campground DB entries
 // seedDB();
 
-mongoose.connect("mongodb://localhost/yelp_camp");
+var dburl = process.env.DATABASEURL || "mongodb://localhost/yelp_camp";
+mongoose.connect(dburl);
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
